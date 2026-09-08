@@ -37,7 +37,7 @@ export default function Hero() {
       id="top"
       ref={ref}
       onMouseMove={handleMouseMove}
-      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-10 pt-32 md:px-10 md:pb-14"
+      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden px-6 pb-8 pt-[max(6.5rem,calc(5.5rem+env(safe-area-inset-top)))] md:px-10 md:pb-14 md:pt-32"
     >
       <div
         aria-hidden="true"
@@ -113,13 +113,13 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: easeOut, delay: 0.85 }}
-                className="mt-8 flex items-center gap-6 md:mt-10"
+                className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 md:mt-10"
               >
                 <button
                   type="button"
                   onClick={handleScrollClick}
                   data-cursor="VIEW"
-                  className="text-sm uppercase tracking-widest2 text-ink transition-colors hover:text-accent"
+                  className="whitespace-nowrap text-sm uppercase tracking-widest2 text-ink transition-colors hover:text-accent"
                 >
                   View Projects
                 </button>

@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { NormalizedGalleryItem } from '@/lib/utils';
 import { cn, withBasePath } from '@/lib/utils';
 import { useFittedImageSize } from '@/hooks/useFittedImageSize';
+import { useIsTouchDevice } from '@/hooks/useIsTouchDevice';
 
 interface ProjectLightboxProps {
   items: NormalizedGalleryItem[];
@@ -57,6 +58,7 @@ export default function ProjectLightbox({
   sizePreset = 'full',
 }: ProjectLightboxProps) {
   const prefersReducedMotion = useReducedMotion();
+  const isTouch = useIsTouchDevice();
   const dialogRef = useRef<HTMLDivElement>(null);
   const isOpen = index !== null;
   const total = items.length;
@@ -109,6 +111,27 @@ export default function ProjectLightbox({
     else if (info.offset.x > SWIPE_THRESHOLD) goPrev();
   };
 
+  // On touch, swipe navigation is handled with plain touch events instead of
+  // framer-motion's `drag` — motion's drag gesture claims the pointer via
+  // `touch-action`, which forces out pinch-zoom (there's no way to keep both
+  // "drag this element" and "let the browser handle a 2-finger zoom" active
+  // on the same element). Screenshots often have small text worth zooming
+  // into, so on touch we give up the 1:1 drag-follow feel in exchange for
+  // native pinch-zoom staying available, and detect the swipe from plain
+  // touchstart/touchend coordinates instead.
+  const touchStartX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || total <= 1) return;
+    const endX = e.changedTouches[0]?.clientX ?? touchStartX.current;
+    const delta = endX - touchStartX.current;
+    touchStartX.current = null;
+    if (delta < -SWIPE_THRESHOLD) goNext();
+    else if (delta > SWIPE_THRESHOLD) goPrev();
+  };
+
   // Sized to the active image's own aspect ratio rather than a fixed
   // vw/vh box — a fixed-width box left a wide invisible strip on either
   // side of a portrait/vertical photo (e.g. Cat Blast's gallery) that
@@ -143,7 +166,7 @@ export default function ProjectLightbox({
           onClose();
         }}
         aria-label="Close image"
-        className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-canvas/80 text-ink transition-colors hover:bg-ink hover:text-canvas md:right-8 md:top-8"
+        className="absolute right-4 top-[max(1rem,env(safe-area-inset-top))] flex h-11 w-11 items-center justify-center rounded-full border border-line bg-canvas/80 text-ink transition-colors hover:bg-ink hover:text-canvas md:right-8 md:top-8"
       >
         <X size={20} />
       </button>
@@ -154,10 +177,12 @@ export default function ProjectLightbox({
             key={activeIndex}
             src={withBasePath(active.src)}
             alt={active.alt}
-            drag={total > 1 ? 'x' : false}
+            drag={!isTouch && total > 1 ? 'x' : false}
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.4}
             onDragEnd={handleDragEnd}
+            onTouchStart={isTouch ? handleTouchStart : undefined}
+            onTouchEnd={isTouch ? handleTouchEnd : undefined}
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
@@ -168,7 +193,7 @@ export default function ProjectLightbox({
                 ? { imageRendering, width: fittedSize.width, height: fittedSize.height }
                 : { imageRendering, maxWidth: `${bounds.maxWidthVw}vw`, maxHeight: `${bounds.maxHeightVh}vh` }
             }
-            className="touch-none object-contain"
+            className="object-contain"
           />
         )}
       </AnimatePresence>
@@ -201,7 +226,7 @@ export default function ProjectLightbox({
       )}
 
       {active && (
-        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 md:bottom-10">
+        <div className="absolute bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 md:bottom-10">
           <p className="max-w-[70vw] truncate font-mono text-[11px] tracking-wide text-muted">{active.filename}</p>
           {total > 1 && (
             <p className="num font-mono text-xs text-muted">

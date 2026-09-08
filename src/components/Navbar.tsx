@@ -5,10 +5,12 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-
 import { Menu, X } from 'lucide-react';
 import { siteConfig } from '@/data/siteConfig';
 import { cn } from '@/lib/utils';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  useLockBodyScroll(menuOpen);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
@@ -26,7 +28,7 @@ export default function Navbar() {
     <>
       <header
         className={cn(
-          'fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-soft',
+          'fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top)] transition-all duration-500 ease-soft',
           scrolled ? 'bg-canvas/75 backdrop-blur-lg border-b border-line' : 'bg-transparent border-b border-transparent'
         )}
       >
@@ -65,7 +67,7 @@ export default function Navbar() {
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
-            className="p-1 text-ink md:hidden"
+            className="flex h-11 w-11 items-center justify-center text-ink md:hidden"
           >
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>

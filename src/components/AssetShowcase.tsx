@@ -32,12 +32,19 @@ function entryArea(entry: GalleryEntry): number {
  * A fluid piece size for position `rank` out of `count` (0 = smallest, last
  * = largest): a CSS clamp() so it also shrinks gracefully on narrow
  * viewports without any JS viewport tracking — the vw-based middle value
- * scales with the screen, floored/ceilinged by fixed px bounds.
+ * scales with the screen, floored/ceilinged by fixed px bounds. The floor
+ * (what narrow phones actually render, since the vw-preferred value stays
+ * below it up to roughly tablet width) is kept just above the ~44px touch
+ * target rather than the desktop scale's own proportions — using the same
+ * 0.6× floor as desktop would fit only 2 per row and turn 16 pieces into a
+ * very tall scroll; more, smaller-but-still-legible pieces per row keeps the
+ * whole board roughly half the height without shrinking anything below a
+ * comfortably tappable size.
  */
 function pieceSize(rank: number, count: number): string {
   const t = count > 1 ? rank / (count - 1) : 1;
   const px = Math.round(MIN_PIECE_SIZE + (MAX_PIECE_SIZE - MIN_PIECE_SIZE) * t);
-  const floor = Math.round(px * 0.6);
+  const floor = Math.max(44, Math.round(px * 0.5));
   const vw = ((px / 1600) * 100).toFixed(2);
   return `clamp(${floor}px, ${vw}vw, ${px}px)`;
 }
@@ -138,7 +145,7 @@ export default function AssetShowcase({ items, title }: AssetShowcaseProps) {
       {/* The board itself: a slightly elevated dark surface with a very
           faint grid-line texture, evoking a game playfield rather than a
           plain card list. */}
-      <div className="relative overflow-hidden rounded-sm border border-line bg-night p-4 md:p-6">
+      <div className="relative overflow-hidden rounded-sm border border-line bg-night p-3 md:p-6">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 text-line opacity-60"
@@ -149,7 +156,7 @@ export default function AssetShowcase({ items, title }: AssetShowcaseProps) {
           }}
         />
 
-        <div className="relative flex flex-wrap items-start gap-3 md:gap-4">
+        <div className="relative flex flex-wrap items-start gap-2 md:gap-4">
           {normalized.map((item, i) => {
             const size = pieceSize(i, normalized.length);
             return (

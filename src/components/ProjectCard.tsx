@@ -162,9 +162,9 @@ export default function ProjectCard({ project, index, onOpen }: ProjectCardProps
             <Thumb project={project} sizes="50vw" className="aspect-[3/4]" />
             <Thumb project={project} src={project.thumbnailSecondary ?? project.thumbnail} sizes="50vw" className="aspect-[3/4]" />
           </div>
-          <div className="mt-6 flex items-baseline justify-between gap-4">
+          <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
             <Meta project={project} index={index} />
-            <p className="max-w-sm text-right text-base leading-relaxed text-muted">{project.description}</p>
+            <p className="text-base leading-relaxed text-muted sm:max-w-sm sm:text-right">{project.description}</p>
           </div>
         </motion.article>
       );

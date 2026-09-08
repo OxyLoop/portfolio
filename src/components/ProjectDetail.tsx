@@ -85,7 +85,7 @@ export default function ProjectDetail({ project, isOpen, onClose }: ProjectDetai
     >
       <CustomScrollbar containerRef={dialogRef} />
 
-      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-canvas/95 px-6 py-5 backdrop-blur-sm md:px-10">
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-canvas/95 px-6 py-5 pt-[max(1.25rem,env(safe-area-inset-top))] backdrop-blur-sm md:px-10">
         <button
           type="button"
           onClick={onClose}

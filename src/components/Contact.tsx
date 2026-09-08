@@ -81,10 +81,12 @@ export default function Contact() {
           <a
             href={`mailto:${siteConfig.email}`}
             data-cursor="VIEW"
-            className="group flex items-center gap-3 border-b border-ink/30 pb-2 text-2xl text-ink transition-colors duration-300 hover:border-ink md:text-4xl"
+            className="group flex min-w-0 max-w-full flex-wrap items-center gap-x-3 gap-y-1 border-b border-ink/30 pb-2 text-lg text-ink transition-colors duration-300 hover:border-ink sm:text-2xl md:text-4xl"
           >
-            {siteConfig.email}
-            <ArrowUpRight className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" size={28} />
+            <span className="min-w-0 break-all">{siteConfig.email}</span>
+            <ArrowUpRight
+              className="h-[22px] w-[22px] flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 md:h-7 md:w-7"
+            />
           </a>
           <button
             type="button"
