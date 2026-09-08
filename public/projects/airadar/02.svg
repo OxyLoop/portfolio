@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="g-7a5hcv" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#12203A" />
+      <stop offset="100%" stop-color="#2E6F8E" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#g-7a5hcv)" />
+  <g opacity="0.12" stroke="#F5F3F0" stroke-width="1">
+    <line x1="0" y1="0" x2="0" y2="1000" />
+    <line x1="177.77777777777777" y1="0" x2="177.77777777777777" y2="1000" />
+    <line x1="355.55555555555554" y1="0" x2="355.55555555555554" y2="1000" />
+    <line x1="533.3333333333334" y1="0" x2="533.3333333333334" y2="1000" />
+    <line x1="711.1111111111111" y1="0" x2="711.1111111111111" y2="1000" />
+    <line x1="888.8888888888889" y1="0" x2="888.8888888888889" y2="1000" />
+    <line x1="1066.6666666666667" y1="0" x2="1066.6666666666667" y2="1000" />
+    <line x1="1244.4444444444443" y1="0" x2="1244.4444444444443" y2="1000" />
+    <line x1="1422.2222222222222" y1="0" x2="1422.2222222222222" y2="1000" />
+    <line x1="1600" y1="0" x2="1600" y2="1000" />
+  </g>
+  <text x="800" y="500" font-family="Georgia, serif" font-style="italic" font-size="71" fill="#F5F3F0" fill-opacity="0.85" text-anchor="middle" dominant-baseline="middle">AIRadar</text>
+  <text x="32" y="972" font-family="monospace" font-size="18" letter-spacing="2" fill="#F5F3F0" fill-opacity="0.5">PLACEHOLDER — 02</text>
+</svg>

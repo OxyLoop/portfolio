@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #7cff9b;
+  color: #0a0a0a;
+}
+
+/* Visible, high-contrast focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid #7cff9b;
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+@keyframes caret-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-caret {
+  animation: caret-blink 1.1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-caret {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Hide the native cursor only once JS has confirmed a fine pointer and
+   mounted the custom cursor — see CustomCursor.tsx. If JS fails, the
+   `cursor-none` class is never applied and the native cursor is untouched. */
+.custom-cursor-active {
+  cursor: none;
+}
+.custom-cursor-active a,
+.custom-cursor-active button {
+  cursor: none;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The page itself always uses CustomScrollbar's own progress indicator
+   instead of a native scrollbar (see CustomScrollbar.tsx). This has to be a
+   plain CSS rule rather than a class toggled from CustomScrollbar's effect:
+   any class added imperatively via classList would get wiped the next time
+   a React-controlled className changes elsewhere in the tree. */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Applied directly in JSX (never imperatively, for the same reason as
+   above) to specific scroll containers — ProjectDetail's own scroll area,
+   the gallery filmstrip — that show their own CustomScrollbar instance. */
+.no-native-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-native-scrollbar::-webkit-scrollbar {
+  display: none;
+}
