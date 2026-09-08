@@ -56,6 +56,18 @@ export default function ProjectDetail({ project, isOpen, onClose }: ProjectDetai
     if (dialogRef.current) dialogRef.current.inert = !isOpen;
   }, [isOpen]);
 
+  // There's only ever one ProjectDetail instance — opening a different
+  // project just swaps `project` on the same mounted overlay rather than
+  // mounting a fresh one, so its scroll container otherwise keeps whatever
+  // scrollTop was left over from whichever project was viewed last (e.g.
+  // scrolled to the bottom). Reset to the top on every fresh open and on
+  // switching projects, but not on close — resetting mid-close-fade would
+  // visibly jump the still-fading-out content.
+  useEffect(() => {
+    if (!isOpen || !dialogRef.current) return;
+    dialogRef.current.scrollTop = 0;
+  }, [isOpen, project.id]);
+
   return (
     <motion.div
       ref={dialogRef}
