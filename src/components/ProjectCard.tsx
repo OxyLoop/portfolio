@@ -66,10 +66,19 @@ function Meta({ project, index }: { project: Project; index: number }) {
   );
 }
 
+/**
+ * Below `md` there's no hover, so the desktop-only reveal ("View project",
+ * opacity-0 until group-hover) is permanently invisible on touch — nothing
+ * tells mobile users a card's photo is tappable. Mobile gets its own
+ * always-visible label instead; the `md:` breakpoint keeps desktop's
+ * hover-reveal behavior byte-for-byte the same as before.
+ */
 function ViewLink() {
   return (
-    <span className="flex items-center gap-1.5 text-sm uppercase tracking-widest2 text-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-      View project <ArrowUpRight size={16} />
+    <span className="flex items-center gap-1.5 text-sm uppercase tracking-widest2 text-ink opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
+      <span className="md:hidden">Tap to explore</span>
+      <span className="hidden md:inline">View project</span>
+      <ArrowUpRight size={16} />
     </span>
   );
 }
@@ -146,6 +155,9 @@ export default function ProjectCard({ project, index, onOpen }: ProjectCardProps
               <h3 className="text-display-lg font-semibold uppercase leading-[0.9] text-ink transition-colors duration-300 group-hover:text-accent">
                 {project.title}
               </h3>
+              <span className="flex items-center gap-1.5 text-sm uppercase tracking-widest2 text-ink md:hidden">
+                Tap to explore <ArrowUpRight size={16} />
+              </span>
             </div>
             <p className="max-w-sm text-base leading-relaxed text-muted">{project.description}</p>
           </div>
